@@ -25,6 +25,19 @@ app.use(session({
 // serve css and other static files
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.get('/api/health', async (req, res) => {
+    try {
+        await dbConnection({ exitOnFail: false });
+        res.json({ status: 'ok', database: 'connected' });
+    } catch (err) {
+        res.status(500).json({
+            status: 'error',
+            database: 'disconnected',
+            message: 'Check database environment variables on the server'
+        });
+    }
+});
+
 // use router
 app.use('/', userRouter);
 

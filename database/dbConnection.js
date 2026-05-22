@@ -1,13 +1,20 @@
 const { Pool } = require("pg");
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  host: process.env.DB_HOST || "localhost",
-  port: Number(process.env.DB_PORT || 5432),
-  database: process.env.DB_NAME || "car_hub",
-  user: process.env.DB_USER || "postgres",
-  password: process.env.DB_PASSWORD || "postgres",
-});
+const poolConfig = process.env.DATABASE_URL
+  ? {
+      connectionString: process.env.DATABASE_URL,
+      ssl: process.env.DB_SSL === "false" ? false : { rejectUnauthorized: false },
+    }
+  : {
+      host: process.env.DB_HOST || "localhost",
+      port: Number(process.env.DB_PORT || 5432),
+      database: process.env.DB_NAME || "car_hub",
+      user: process.env.DB_USER || "postgres",
+      password: process.env.DB_PASSWORD || "postgres",
+    };
+
+const pool = new Pool(poolConfig);
+let initPromise;
 
 const createTables = async () => {
   await pool.query(`
@@ -59,16 +66,44 @@ const createTables = async () => {
   `);
 };
 
-const dbConnection = async () => {
-  try {
+const dbConnection = async ({ exitOnFail = true } = {}) => {
+  if (initPromise) {
+    return initPromise;
+  }
+
+  initPromise = (async () => {
     await pool.query("SELECT NOW()");
     await createTables();
     console.log("PostgreSQL connected");
+  })();
+
+  try {
+    return await initPromise;
   } catch (err) {
+    initPromise = null;
     console.error("PostgreSQL connection error:", err.message);
-    process.exit(1);
+    if (exitOnFail) {
+      process.exit(1);
+    }
+    throw err;
+  }
+};
+
+const ensureDatabase = async (req, res, next) => {
+  try {
+    await dbConnection({ exitOnFail: false });
+    next();
+  } catch (err) {
+    const message = "Database connection failed. Check the deployed database environment variables.";
+
+    if (req.accepts("html")) {
+      return res.status(500).send(message);
+    }
+
+    return res.status(500).json({ error: message });
   }
 };
 
 module.exports = dbConnection;
 module.exports.pool = pool;
+module.exports.ensureDatabase = ensureDatabase;

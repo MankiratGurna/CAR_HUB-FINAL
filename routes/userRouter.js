@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const upload = require('../multer/upload');
+const { ensureDatabase } = require('../database/dbConnection');
 
 // Import Controllers
 const viewController = require('../controller/viewController');
@@ -44,19 +45,19 @@ router.get("/sell", isAuthenticated, viewController.getSellPage);
 router.get('/profile', isAuthenticated, viewController.getProfilePage);
 
 // Auth Routes
-router.post('/login', authController.login);
-router.post('/signup', authController.signup);
+router.post('/login', ensureDatabase, authController.login);
+router.post('/signup', ensureDatabase, authController.signup);
 router.get('/logout', authController.logout);
 
 // Service Routes
-router.post("/book-service", isAuthenticated, serviceController.bookService);
+router.post("/book-service", isAuthenticated, ensureDatabase, serviceController.bookService);
 
 // Car Routes
-router.post("/sell-car", isAuthenticated, uploadCarFiles, carController.sellCar);
-router.get("/api/cars-for-sale", carController.getCarsForSale);
-router.post("/api/buy-car/:id", isAuthenticated, carController.buyCar);
+router.post("/sell-car", isAuthenticated, ensureDatabase, uploadCarFiles, carController.sellCar);
+router.get("/api/cars-for-sale", ensureDatabase, carController.getCarsForSale);
+router.post("/api/buy-car/:id", isAuthenticated, ensureDatabase, carController.buyCar);
 
 // User Routes
-router.get('/api/my-registrations', isAuthenticated, userController.getMyRegistrations);
+router.get('/api/my-registrations', isAuthenticated, ensureDatabase, userController.getMyRegistrations);
 
 module.exports = router;
