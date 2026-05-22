@@ -4,6 +4,7 @@ const path = require('path');
 const app = express();
 const dbConnection = require('./database/dbConnection.js');
 const userRouter = require('./routes/userRouter');
+const PgSessionStore = require('./database/sessionStore');
 
 
 
@@ -11,13 +12,17 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 const session = require('express-session');
+app.set('trust proxy', 1);
 app.use(session({
+    store: new PgSessionStore(),
     secret: process.env.SESSION_SECRET || 'car-hub-secret-key',
     resave: false,
     saveUninitialized: false,
     cookie: { 
-        secure: false, // Set to true if using HTTPS
-        maxAge: 1000 * 60 * 60 * 24 // 1 day
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
+        sameSite: 'lax',
+        maxAge: 1000 * 60 * 60 * 24
     }
 }));
 

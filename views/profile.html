@@ -269,7 +269,7 @@
         function renderSales() {
             const container = document.getElementById('sales-content');
             if (!registrations.sales || registrations.sales.length === 0) {
-                container.innerHTML = `<div class="empty-state">You haven't listed any cars for sale yet.</div>`;
+                container.innerHTML = `<div class="empty-state">You have not listed any cars for sale yet.</div>`;
                 return;
             }
 
@@ -280,7 +280,7 @@
                     <div class="reg-detail"><span>Price:</span> <span>$${reg.rate.toLocaleString()}</span></div>
                     <div class="reg-detail"><span>Fuel:</span> <span>${reg.fuelType}</span></div>
                     <div class="reg-detail"><span>Listed On:</span> <span>${new Date(reg.createdAt).toLocaleDateString()}</span></div>
-                    <span class="status-badge" style="background: var(--accent-color); color: white;">Active</span>
+                    <span class="status-badge" style="background: ${reg.isSold ? 'var(--danger-color)' : 'var(--accent-color)'}; color: white;">${reg.isSold ? 'Sold' : 'Active'}</span>
                 </div>
             `).join('');
         }

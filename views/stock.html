@@ -424,6 +424,7 @@
           headers: {
             'Content-Type': 'application/json'
           },
+          credentials: 'same-origin',
           body: JSON.stringify(data)
         });
 
@@ -432,7 +433,12 @@
           closeModal();
           fetchCars(); // Refresh the list
         } else {
-          const resData = await response.json();
+          const resData = await response.json().catch(() => ({}));
+          if (response.status === 401) {
+            alert("Please login once, then try buying again.");
+            window.location.href = '/login';
+            return;
+          }
           alert("⚠️ " + (resData.error || "Something went wrong."));
         }
       } catch (error) {

@@ -28,7 +28,13 @@ exports.login = async (req, res) => {
                 console.log('Login successful for user:', username);
                 if (req.session) {
                     req.session.userId = user._id;
-                    res.redirect('/home');
+                    req.session.save((saveErr) => {
+                        if (saveErr) {
+                            console.error('Error saving session:', saveErr);
+                            return res.status(500).send('Session error');
+                        }
+                        res.redirect('/home');
+                    });
                 } else {
                     console.error('Session middleware not initialized');
                     res.status(500).send('Session error');
