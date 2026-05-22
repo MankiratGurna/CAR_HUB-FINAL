@@ -268,7 +268,8 @@
           document.getElementById("successPopup").style.display = "flex";
           this.reset();
         } else {
-          alert("⚠️ Something went wrong while saving your data.");
+          const errorData = await response.json().catch(() => ({}));
+          alert(errorData.message || errorData.error || "Something went wrong while saving your data.");
         }
       } catch (error) {
         console.error("Upload error:", error);

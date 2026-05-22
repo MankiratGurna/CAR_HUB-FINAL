@@ -1,12 +1,14 @@
 const SellCar = require('../models/SellCar');
 const Purchase = require('../models/Purchase');
 
+const getUploadedFileUrl = (file) => file.path || `/uploads/${file.filename}`;
+
 exports.sellCar = async (req, res) => {
     try {
         const { carName, model, fuelType, bodyType, rate } = req.body;
         
-        const documentPhotoPath = req.files['documentPhoto'] ? '/uploads/' + req.files['documentPhoto'][0].filename : '';
-        const carPhotosPaths = req.files['carPhotos'] ? req.files['carPhotos'].map(file => '/uploads/' + file.filename) : [];
+        const documentPhotoPath = req.files['documentPhoto'] ? getUploadedFileUrl(req.files['documentPhoto'][0]) : '';
+        const carPhotosPaths = req.files['carPhotos'] ? req.files['carPhotos'].map(getUploadedFileUrl) : [];
 
         const newSellCar = new SellCar({
             carName,
