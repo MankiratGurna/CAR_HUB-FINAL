@@ -1,0 +1,17 @@
+[
+  {
+    "fullname": "mankirat",
+    "email": "mankiratgurna2595@gmail.com",
+    "password": "12345678"
+  },
+  {
+    "fullname": "mannat",
+    "email": "sbawa8712@gmail.com",
+    "password": "987654321"
+  },
+  {
+    "fullname": "shivam",
+    "email": "thakurshorya0022@gmail.com",
+    "password": "123456789"
+  }
+]

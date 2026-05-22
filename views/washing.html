@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Washing Service</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      height: 100%;
+      background-image: url("https://www.shutterstock.com/image-photo/automotive-detailer-washing-away-smart-600nw-2287564671.jpg"); /* Replace with your image */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: white;
+    }
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.7);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .form-container {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 2px solid #00bcd4;
+      border-radius: 15px;
+      padding: 30px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      animation: fadeInUp 1s ease;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      color: #00e5ff;
+      text-shadow: 0 0 10px #00e5ff;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      text-align: left;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: none;
+      font-size: 1em;
+    }
+
+    button {
+      margin-top: 25px;
+      padding: 12px 25px;
+      background-color: #00bcd4;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0097a7;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Confirmation Popup */
+    .popup {
+      display: none;
+      position: fixed;
+      z-index: 10;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .popup-content {
+      background-color: #222;
+      padding: 30px;
+      border-radius: 10px;
+      border: 2px solid #00e5ff;
+      text-align: center;
+      color: white;
+      max-width: 400px;
+    }
+
+    .popup-content h2 {
+      margin-bottom: 15px;
+      color: #00e5ff;
+    }
+
+    .popup-content button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #00bcd4;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .popup-content button:hover {
+      background-color: #0097a7;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <div class="navbar" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; position: absolute; top: 0; left: 0; box-sizing: border-box; background: rgba(0,0,0,0.5); z-index: 10;">
+      <div class="logo" style="font-size: 24px; font-weight: bold; color: #00e5ff;">CarHub</div>
+      <div class="nav-links">
+        <a href="home" style="color: white; text-decoration: none; margin: 0 15px;">Home</a>
+        <a href="stock" style="color: white; text-decoration: none; margin: 0 15px;">Buy</a>
+        <a href="services" style="color: white; text-decoration: none; margin: 0 15px;">Services</a>
+        <a href="sell" style="color: white; text-decoration: none; margin: 0 15px;">Sell</a>
+        <a href="profile" style="color: white; text-decoration: none; margin: 0 15px;">My Registrations</a>
+        <a href="contact" style="color: white; text-decoration: none; margin: 0 15px;">Contact</a>
+        <a href="logout" style="color: white; text-decoration: none; margin: 0 15px;">Logout</a>
+      </div>
+    </div>
+    <div class="form-container">
+      <h1 style="margin-top: 20px;">🚗 Book a Car Wash</h1>
+      <form id="washForm">
+        <label for="location">Pickup Location:</label>
+        <input type="text" id="location" name="location" placeholder="Enter your address" required />
+
+        <label for="washType">Washing Type:</label>
+        <select id="washType" name="washType" required>
+          <option value="">Select type</option>
+          <option value="Exterior">Exterior</option>
+          <option value="Interior">Interior</option>
+          <option value="Both">Both</option>
+        </select>
+
+        <label for="date">Preferred Date:</label>
+        <input type="date" id="date" name="date" required />
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Confirmation Popup -->
+  <div class="popup" id="confirmationPopup">
+    <div class="popup-content">
+      <h2>✅ Booking Confirmed!</h2>
+      <p id="confirmationText"></p>
+      <button onclick="document.getElementById('confirmationPopup').style.display='none'">Close</button>
+    <button type="button" onclick="window.location.href='home'" style="margin-top: 15px; background-color: #ffffff20; color: #00e5ff; border: 1px solid #00e5ff;">
+    ← Back to Home
+  </button>
+
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("washForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const location = document.getElementById("location").value;
+      const type = document.getElementById("washType").value;
+      const date = document.getElementById("date").value;
+
+      if (location && type && date) {
+        try {
+          const response = await fetch('/book-service', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              serviceType: 'Washing',
+              date: date,
+              location: location,
+              washType: type
+            })
+          });
+          
+          if (response.ok) {
+            document.getElementById("confirmationText").innerText =
+              `Your ${type.toLowerCase()} wash is scheduled for ${date} at ${location}.`;
+            document.getElementById("confirmationPopup").style.display = "flex";
+            document.getElementById("washForm").reset();
+          } else {
+            alert("⚠️ Something went wrong. Please try again.");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("⚠️ Error connecting to the server.");
+        }
+      }
+    });
+  </script>
+</body>
+</html>

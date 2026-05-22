@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vehicle Modification</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      height: 100%;
+      background-image: url("https://static.vecteezy.com/system/resources/previews/026/991/600/non_2x/classic-modified-car-with-dark-smokie-background-ai-generative-free-photo.jpg"); /* Replace with your image */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: white;
+    }
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.75);
+      min-height: 100vh;
+      padding: 60px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-bottom: 20px;
+      text-align: center;
+      animation: fadeInDown 1s ease;
+      color: #00ffff;
+      text-shadow: 0 0 10px #00ffff;
+    }
+
+    .mod-details {
+      max-width: 900px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 2px solid #00ffff;
+      border-radius: 15px;
+      padding: 30px;
+      text-align: left;
+      animation: fadeInUp 1s ease;
+    }
+
+    .mod-details h2 {
+      font-size: 2em;
+      margin-bottom: 15px;
+      color: #00ffff;
+    }
+
+    .mod-details ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .mod-details ul li {
+      margin-bottom: 10px;
+      font-size: 1.1em;
+      position: relative;
+      padding-left: 25px;
+    }
+
+    .mod-details ul li::before {
+      content: "✨";
+      position: absolute;
+      left: 0;
+    }
+
+    .btn-back, .btn-book {
+      margin-top: 25px;
+      padding: 12px 25px;
+      background-color: #00ffff;
+      color: black;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-right: 10px;
+    }
+
+    .btn-back:hover, .btn-book:hover {
+      background-color: #00dddd;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.7);
+    }
+
+    .modal-content {
+      background-color: #222;
+      margin: 10% auto;
+      padding: 30px;
+      border: 2px solid #00ffff;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .modal-content input[type="date"] {
+      padding: 10px;
+      font-size: 1em;
+      border-radius: 5px;
+      border: none;
+      margin-bottom: 20px;
+    }
+
+    .modal-content button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      background-color: #00ffff;
+      color: black;
+      cursor: pointer;
+    }
+
+    .modal-content button:hover {
+      background-color: #00dddd;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <div class="navbar" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; position: absolute; top: 0; left: 0; box-sizing: border-box; background: rgba(0,0,0,0.5); z-index: 10;">
+      <div class="logo" style="font-size: 24px; font-weight: bold; color: #00ffff;">CarHub</div>
+      <div class="nav-links">
+        <a href="home" style="color: white; text-decoration: none; margin: 0 15px;">Home</a>
+        <a href="stock" style="color: white; text-decoration: none; margin: 0 15px;">Buy</a>
+        <a href="services" style="color: white; text-decoration: none; margin: 0 15px;">Services</a>
+        <a href="sell" style="color: white; text-decoration: none; margin: 0 15px;">Sell</a>
+        <a href="profile" style="color: white; text-decoration: none; margin: 0 15px;">My Registrations</a>
+        <a href="contact" style="color: white; text-decoration: none; margin: 0 15px;">Contact</a>
+        <a href="logout" style="color: white; text-decoration: none; margin: 0 15px;">Logout</a>
+      </div>
+    </div>
+    <h1 style="margin-top: 20px;">🛠️ Vehicle Modification</h1>
+    <div class="mod-details">
+      <h2>Customization Services</h2>
+      <ul>
+        <li>Sporty body kits and spoilers</li>
+        <li>Custom alloy wheels and tires</li>
+        <li>LED lighting and underglow effects</li>
+        <li>Interior leather and dashboard upgrades</li>
+        <li>Performance exhaust systems</li>
+        <li>Audio system enhancements</li>
+        <li>Paint wraps and decals</li>
+      </ul>
+      <button class="btn-book" onclick="document.getElementById('bookingModal').style.display='block'">📅 Book Modification Date</button>
+      <button class="btn-back" onclick="window.location.href='car dealership new.html'">← Back to Home</button>
+    </div>
+  </div>
+
+  <!-- Booking Modal -->
+  <div id="bookingModal" class="modal">
+    <div class="modal-content">
+      <h2>Select Your Modification Date</h2>
+      <input type="date" id="modDate" />
+      <br />
+      <button onclick="submitBooking()">Confirm</button>
+    </div>
+  </div>
+
+  <script>
+    async function submitBooking() {
+      const date = document.getElementById("modDate").value;
+      if (date) {
+        try {
+          const response = await fetch('/book-service', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              serviceType: 'Modification',
+              date: date
+            })
+          });
+          
+          if (response.ok) {
+            alert("✅ Your modification is booked for: " + date);
+            document.getElementById("bookingModal").style.display = "none";
+          } else {
+            alert("⚠️ Something went wrong. Please try again.");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("⚠️ Error connecting to the server.");
+        }
+      } else {
+        alert("⚠️ Please select a date before confirming.");
+      }
+    }
+
+    window.onclick = function(event) {
+      const modal = document.getElementById("bookingModal");
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>

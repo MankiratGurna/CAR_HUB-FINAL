@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buy a Car - CarHub</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      background-image: url("https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=2070&auto=format&fit=crop"); /* Nice car background */
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: white;
+    }
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.85);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .navbar {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 40px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      box-sizing: border-box;
+      background: rgba(0,0,0,0.5);
+    }
+    
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #00ffff;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      margin: 0 15px;
+      font-size: 16px;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover {
+      color: #00ffff;
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-top: 80px;
+      margin-bottom: 30px;
+      color: #00d2d3;
+      text-shadow: 0 0 10px #00d2d3;
+      animation: fadeInDown 1s ease;
+      text-align: center;
+    }
+
+    #car-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      max-width: 1200px;
+      width: 100%;
+      animation: fadeInUp 1s ease;
+    }
+
+    .car-card {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid #00d2d3;
+      border-radius: 15px;
+      width: 300px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease;
+    }
+
+    .car-card:hover {
+      transform: translateY(-5px);
+      border-color: #48dbfb;
+    }
+
+    .car-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .car-details {
+      padding: 20px;
+    }
+
+    .car-details h2 {
+      margin: 0 0 10px 0;
+      color: #48dbfb;
+      font-size: 1.5em;
+    }
+
+    .car-details p {
+      margin: 5px 0;
+      font-size: 1em;
+      color: #c8d6e5;
+    }
+
+    .price {
+      font-size: 1.5em !important;
+      font-weight: bold;
+      color: #1dd1a1 !important;
+      margin-top: 15px !important;
+      margin-bottom: 15px !important;
+    }
+
+    .btn-buy {
+      padding: 10px;
+      font-size: 1.1em;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: #1dd1a1;
+      color: black;
+      width: 100%;
+      transition: background-color 0.3s;
+    }
+
+    .btn-buy:hover {
+      background-color: #10ac84;
+    }
+
+    .card-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn-document {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      font-size: 1.1em;
+      font-weight: bold;
+      border: 1px solid #48dbfb;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: transparent;
+      color: #48dbfb;
+      text-decoration: none;
+      box-sizing: border-box;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .btn-document:hover {
+      background-color: #48dbfb;
+      color: black;
+    }
+
+    .btn-document.disabled {
+      border-color: rgba(255,255,255,0.25);
+      color: rgba(255,255,255,0.45);
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    #no-cars-msg {
+      display: none;
+      font-size: 1.5em;
+      color: #ff6b6b;
+      margin-top: 50px;
+      text-align: center;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Popup Modal */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.85);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .popup-content {
+      background-color: #2f3542;
+      padding: 40px;
+      border-radius: 15px;
+      border: 2px solid #00d2d3;
+      max-width: 450px;
+      width: 90%;
+    }
+
+    .popup-content h2 {
+      color: #00d2d3;
+      margin-top: 0;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      color: #f1f2f6;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid rgba(255,255,255,0.3);
+      background-color: rgba(0,0,0,0.5);
+      color: white;
+      box-sizing: border-box;
+    }
+
+    .btn-submit-buy {
+      background-color: #00d2d3;
+      color: black;
+      border: none;
+      padding: 12px;
+      border-radius: 5px;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .btn-submit-buy:hover {
+      background-color: #0abde3;
+    }
+
+    .btn-close {
+      background-color: transparent;
+      color: #ff6b6b;
+      border: 1px solid #ff6b6b;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+    
+    .btn-close:hover {
+      background-color: rgba(255, 107, 107, 0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="overlay">
+    <div class="navbar">
+      <div class="logo">CarHub</div>
+      <div class="nav-links">
+        <a href="home">Home</a>
+        <a href="stock">Buy</a>
+        <a href="services">Services</a>
+        <a href="sell">Sell</a>
+        <a href="profile">My Registrations</a>
+        <a href="contact">Contact</a>
+        <a href="logout">Logout</a>
+      </div>
+    </div>
+
+    <h1>Available Cars For Sale</h1>
+    
+    <div id="no-cars-msg">No car is on sale for now.</div>
+    <div id="car-container">
+      <!-- Car cards will be injected here via JavaScript -->
+    </div>
+  </div>
+
+  <!-- Buy Modal -->
+  <div class="popup" id="buyModal">
+    <div class="popup-content">
+      <h2>Complete Your Purchase</h2>
+      <form id="buyForm">
+        <input type="hidden" id="buyCarId" name="buyCarId">
+        
+        <div class="form-group">
+          <label for="fullname">Full Name</label>
+          <input type="text" id="fullname" name="fullname" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="bankAccount">Bank Account Number</label>
+          <input type="text" id="bankAccount" name="bankAccount" required>
+        </div>
+
+        <div class="form-group">
+          <label for="paymentMethod">Payment Method</label>
+          <select id="paymentMethod" name="paymentMethod" required>
+            <option value="">Select Method</option>
+            <option value="Credit Card">Credit Card</option>
+            <option value="Debit Card">Debit Card</option>
+            <option value="Net Banking">Net Banking</option>
+            <option value="UPI">UPI</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-submit-buy">Confirm Purchase</button>
+        <button type="button" class="btn-close" onclick="closeModal()">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", fetchCars);
+
+    async function fetchCars() {
+      try {
+        const res = await fetch('/api/cars-for-sale');
+        const cars = await res.json();
+        
+        const container = document.getElementById('car-container');
+        const noCarsMsg = document.getElementById('no-cars-msg');
+        
+        container.innerHTML = ''; // Clear container
+
+        if (!cars || cars.length === 0) {
+          noCarsMsg.style.display = 'block';
+        } else {
+          noCarsMsg.style.display = 'none';
+          
+          cars.forEach(car => {
+            const card = document.createElement('div');
+            card.className = 'car-card';
+            
+            // Determine image to show
+            let mainImg = "https://via.placeholder.com/300x200?text=No+Image";
+            if (car.carPhotos && car.carPhotos.length > 0) {
+              mainImg = car.carPhotos[0];
+            } else if (car.documentPhoto) {
+              mainImg = car.documentPhoto;
+            }
+
+            const documentButton = car.documentPhoto
+              ? `<a class="btn-document" href="${car.documentPhoto}" target="_blank" rel="noopener">Document</a>`
+              : `<span class="btn-document disabled">No Document</span>`;
+
+            card.innerHTML = `
+              <img src="${mainImg}" alt="${car.carName}">
+              <div class="car-details">
+                <h2>${car.carName}</h2>
+                <p><strong>Model:</strong> ${car.model}</p>
+                <p><strong>Body Type:</strong> ${car.bodyType}</p>
+                <p><strong>Fuel:</strong> ${car.fuelType}</p>
+                <p class="price">₹ ${car.rate.toLocaleString()}</p>
+                <div class="card-actions">
+                  <button class="btn-buy" onclick="openModal('${car._id}')">Buy Now</button>
+                  ${documentButton}
+                </div>
+              </div>
+            `;
+            container.appendChild(card);
+          });
+        }
+      } catch (err) {
+        console.error("Failed to fetch cars:", err);
+      }
+    }
+
+    function openModal(carId) {
+      document.getElementById('buyCarId').value = carId;
+      document.getElementById('buyModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('buyModal').style.display = 'none';
+      document.getElementById('buyForm').reset();
+    }
+
+    document.getElementById("buyForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      
+      const submitBtn = document.querySelector('.btn-submit-buy');
+      submitBtn.innerText = "Processing...";
+      submitBtn.disabled = true;
+
+      const carId = document.getElementById('buyCarId').value;
+      
+      const data = {
+        fullname: document.getElementById('fullname').value,
+        email: document.getElementById('email').value,
+        bankAccount: document.getElementById('bankAccount').value,
+        paymentMethod: document.getElementById('paymentMethod').value
+      };
+
+      try {
+        const response = await fetch('/api/buy-car/' + carId, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+          alert("✅ Congratulations! Your purchase was successful.");
+          closeModal();
+          fetchCars(); // Refresh the list
+        } else {
+          const resData = await response.json();
+          alert("⚠️ " + (resData.error || "Something went wrong."));
+        }
+      } catch (error) {
+        console.error("Purchase error:", error);
+        alert("⚠️ Connection error. Please try again.");
+      } finally {
+        submitBtn.innerText = "Confirm Purchase";
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+
+</body>
+</html>

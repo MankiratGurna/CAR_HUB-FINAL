@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sell Your Car</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      background-image: url("https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto=format&fit=crop"); /* Nice car background */
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: white;
+    }
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.8);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-bottom: 30px;
+      color: #ff4757;
+      text-shadow: 0 0 10px #ff4757;
+      animation: fadeInDown 1s ease;
+      text-align: center;
+    }
+
+    .form-container {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 2px solid #ff4757;
+      border-radius: 15px;
+      padding: 40px;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      animation: fadeInUp 1s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #f1f2f6;
+    }
+
+    input[type="text"], input[type="number"], select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.3);
+      background-color: rgba(0,0,0,0.5);
+      color: white;
+      font-size: 1em;
+      box-sizing: border-box;
+      transition: border-color 0.3s;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #ff4757;
+    }
+
+    input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px dashed #ff4757;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #f1f2f6;
+    }
+
+    .btn-submit, .btn-back {
+      padding: 15px 30px;
+      font-size: 1.1em;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s, background-color 0.3s;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .btn-submit {
+      background-color: #ff4757;
+      color: white;
+    }
+
+    .btn-submit:hover {
+      background-color: #ff6b81;
+      transform: translateY(-2px);
+    }
+
+    .btn-back {
+      background-color: transparent;
+      border: 1px solid #ff4757;
+      color: #ff4757;
+    }
+
+    .btn-back:hover {
+      background-color: rgba(255, 71, 87, 0.1);
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Popup Modal */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.85);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .popup-content {
+      background-color: #2f3542;
+      padding: 40px;
+      border-radius: 15px;
+      border: 2px solid #2ed573;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .popup-content h2 {
+      color: #2ed573;
+      margin-bottom: 20px;
+    }
+
+    .popup-content button {
+      background-color: #2ed573;
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 5px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="overlay">
+    <div class="navbar" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; position: absolute; top: 0; left: 0; box-sizing: border-box; background: rgba(0,0,0,0.5); z-index: 10;">
+      <div class="logo" style="font-size: 24px; font-weight: bold; color: #ff4757;">CarHub</div>
+      <div class="nav-links">
+        <a href="home" style="color: white; text-decoration: none; margin: 0 15px;">Home</a>
+        <a href="stock" style="color: white; text-decoration: none; margin: 0 15px;">Buy</a>
+        <a href="services" style="color: white; text-decoration: none; margin: 0 15px;">Services</a>
+        <a href="sell" style="color: white; text-decoration: none; margin: 0 15px;">Sell</a>
+        <a href="profile" style="color: white; text-decoration: none; margin: 0 15px;">My Registrations</a>
+        <a href="contact" style="color: white; text-decoration: none; margin: 0 15px;">Contact</a>
+        <a href="logout" style="color: white; text-decoration: none; margin: 0 15px;">Logout</a>
+      </div>
+    </div>
+    <h1 style="margin-top: 80px;">Sell Your Car Fast & Easy</h1>
+    
+    <div class="form-container">
+      <form id="sellForm" enctype="multipart/form-data">
+        
+        <div class="form-group">
+          <label for="carName">Car Name / Brand</label>
+          <input type="text" id="carName" name="carName" placeholder="e.g. Honda Civic" required>
+        </div>
+
+        <div class="form-group">
+          <label for="model">Manufacturing Year / Model</label>
+          <input type="text" id="model" name="model" placeholder="e.g. 2021" required>
+        </div>
+
+        <div class="form-group">
+          <label for="fuelType">Fuel Type</label>
+          <select id="fuelType" name="fuelType" required>
+            <option value="">Select Fuel Type</option>
+            <option value="Petrol">Petrol</option>
+            <option value="Diesel">Diesel</option>
+            <option value="Electric">Electric</option>
+            <option value="Hybrid">Hybrid</option>
+            <option value="CNG">CNG</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="bodyType">Body Type</label>
+          <select id="bodyType" name="bodyType" required>
+            <option value="">Select Body Type</option>
+            <option value="Sedan">Sedan</option>
+            <option value="SUV">SUV</option>
+            <option value="Hatchback">Hatchback</option>
+            <option value="Coupe">Coupe</option>
+            <option value="Truck">Truck</option>
+            <option value="Van">Van</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="rate">Expected Selling Price (₹)</label>
+          <input type="number" id="rate" name="rate" placeholder="e.g. 1500000" required>
+        </div>
+
+        <div class="form-group">
+          <label for="documentPhoto">Upload Car Documents (RC/Insurance Image)</label>
+          <input type="file" id="documentPhoto" name="documentPhoto" accept="image/*,application/pdf" required>
+        </div>
+
+        <div class="form-group">
+          <label for="carPhotos">Upload Car Photos (Multiple allowed)</label>
+          <input type="file" id="carPhotos" name="carPhotos" accept="image/*" multiple required>
+        </div>
+
+        <button type="submit" class="btn-submit">List My Car For Sale</button>
+        <button type="button" class="btn-back" onclick="window.location.href='home'">← Back to Home</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="popup" id="successPopup">
+    <div class="popup-content">
+      <h2>✅ Success!</h2>
+      <p>Your car details and photos have been successfully submitted for review.</p>
+      <button onclick="window.location.href='home'">Done</button>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("sellForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      
+      const submitBtn = document.querySelector('.btn-submit');
+      submitBtn.innerText = "Uploading...";
+      submitBtn.disabled = true;
+
+      const formData = new FormData(this);
+
+      try {
+        const response = await fetch('/sell-car', {
+          method: 'POST',
+          body: formData // No Content-Type header needed for FormData (browser sets it automatically with boundary)
+        });
+
+        if (response.ok) {
+          document.getElementById("successPopup").style.display = "flex";
+          this.reset();
+        } else {
+          alert("⚠️ Something went wrong while saving your data.");
+        }
+      } catch (error) {
+        console.error("Upload error:", error);
+        alert("⚠️ Connection error. Please try again.");
+      } finally {
+        submitBtn.innerText = "List My Car For Sale";
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+
+</body>
+</html>

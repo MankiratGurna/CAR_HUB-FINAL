@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Services</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<style>
+    body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.hero {
+  background-image: url("service.jpg"); 
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 40px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 3em;
+  margin-bottom: 30px;
+}
+
+.services-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.service-card {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 2px solid #fff;
+  border-radius: 10px;
+  padding: 20px;
+  width: 250px;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.service-card:hover {
+  transform: scale(1.05);
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.service-card h2 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.service-card p {
+  font-size: 1em;
+}
+</style>
+<body>
+
+ 
+  <div class="hero">
+    <div class="navbar" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; position: absolute; top: 0; left: 0; box-sizing: border-box; background: rgba(0,0,0,0.5); z-index: 10;">
+      <div class="logo" style="font-size: 24px; font-weight: bold; color: #fff;">CarHub</div>
+      <div class="nav-links">
+        <a href="home" style="color: white; text-decoration: none; margin: 0 15px;">Home</a>
+        <a href="stock" style="color: white; text-decoration: none; margin: 0 15px;">Buy</a>
+        <a href="services" style="color: white; text-decoration: none; margin: 0 15px;">Services</a>
+        <a href="sell" style="color: white; text-decoration: none; margin: 0 15px;">Sell</a>
+        <a href="profile" style="color: white; text-decoration: none; margin: 0 15px;">My Registrations</a>
+        <a href="contact" style="color: white; text-decoration: none; margin: 0 15px;">Contact</a>
+        <a href="logout" style="color: white; text-decoration: none; margin: 0 15px;">Logout</a>
+      </div>
+    </div>
+    <div class="overlay">
+      <h1>Our Services</h1>
+      
+      <div class="services-container">
+        <a href="washing" style="text-decoration: none; color: inherit;">
+  <div class="service-card">
+    <h2>🚿 Washing</h2>
+    <p>Professional exterior and interior cleaning for your vehicle.</p>
+  </div>
+</a>
+<a href="servicing" style="text-decoration: none; color: inherit;">
+        <div class="service-card">
+          <h2>🔧 Servicing</h2>
+          <p>Complete maintenance and check-up to keep your ride smooth.</p>
+        </div>
+        </a>
+        <a href="modification" style="text-decoration: none; color: inherit;">
+        <div class="service-card">
+          <h2>🛠️ Modification</h2>
+          <p>Custom upgrades and styling to make your vehicle stand out.</p>
+        </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
